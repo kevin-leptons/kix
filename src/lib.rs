@@ -3,9 +3,9 @@
 //! clippy::unwrap_used` without hassle.
 //!
 //! Set environment `RUST_BACKTRACE=1` to enable backtrace. The first
-//! backtrace's frame does not point to error's location, the third does. This
-//! issue may be solved once
-//! [Backtrace::frames](std::backtrace::Backtrace::frames) are stable.
+//! backtrace's frame does not point to the error's location accuracy.
+//! Sometimes, the third or fourth does. This issue may be solved once
+//! [Backtrace::frames](std::backtrace::Backtrace::frames) is stable.
 //!
 //! Do not use [Result] for anything other than testing. Because it depends on
 //! [Error] that does not implement [std::error::Error]. This is not a choice.
@@ -48,6 +48,15 @@ where
     E: std::error::Error + 'static,
 {
     fn from(error: E) -> Self {
+        Self::new(error)
+    }
+}
+
+impl Error {
+    pub fn new<E>(error: E) -> Error
+    where
+        E: Into<Box<dyn std::error::Error>>,
+    {
         let inner = InnerError {
             source: error.into(),
             trace: Backtrace::capture(),
@@ -56,9 +65,7 @@ where
             inner: Box::new(inner),
         }
     }
-}
 
-impl Error {
     pub fn as_std_error(&self) -> &(dyn std::error::Error + 'static) {
         &self.inner
     }

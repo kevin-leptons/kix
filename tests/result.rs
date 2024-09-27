@@ -12,14 +12,17 @@ fn from_std_error_by_question_mark() {
 
 #[test]
 fn as_std_error() {
-    let io_error =
-        std::io::Error::new(std::io::ErrorKind::AddrInUse, "An error happened");
+    let io_error = std::io::Error::new(std::io::ErrorKind::AddrInUse, "An error happened");
     let error = Error::from(io_error);
     use_as_std_error_fn(error.as_std_error());
 }
 
-fn to_std_error_box_fn() -> std::result::Result<(), Box<dyn std::error::Error>>
-{
+#[test]
+fn from_str() {
+    Error::new("An error happened");
+}
+
+fn to_std_error_box_fn() -> std::result::Result<(), Box<dyn std::error::Error>> {
     Err(make_kix_error())?
 }
 
@@ -29,8 +32,7 @@ fn from_std_error_fn() -> Result {
 }
 
 fn make_kix_error() -> Error {
-    let io_error =
-        std::io::Error::new(std::io::ErrorKind::AddrInUse, "An error happened");
+    let io_error = std::io::Error::new(std::io::ErrorKind::AddrInUse, "An error happened");
     Error::from(io_error)
 }
 
