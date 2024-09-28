@@ -20,7 +20,7 @@
 use std::backtrace::{Backtrace, BacktraceStatus};
 use std::fmt::{Debug, Display};
 
-pub type Result = std::result::Result<(), Error>;
+pub type Result<T> = std::result::Result<T, Error>;
 
 pub struct Error {
     inner: Box<InnerError>,

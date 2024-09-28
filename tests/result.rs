@@ -26,7 +26,7 @@ fn to_std_error_box_fn() -> std::result::Result<(), Box<dyn std::error::Error>> 
     Err(make_kix_error())?
 }
 
-fn from_std_error_fn() -> Result {
+fn from_std_error_fn() -> Result<()> {
     std::fs::File::open("/tmp/not_existed_file")?;
     Ok(())
 }
