@@ -66,6 +66,18 @@ impl Error {
         }
     }
 
+    /// A shortcut for unexpected error.
+    ///
+    /// ```
+    /// use kix::Error;
+    ///
+    /// let none = Option::<()>::None;
+    /// assert!(none.ok_or(Error::unexpected()).is_err());
+    /// ```
+    pub fn unexpected() -> Error {
+        Self::new("Unexpected")
+    }
+
     pub fn as_std_error(&self) -> &(dyn std::error::Error + 'static) {
         &self.inner
     }
