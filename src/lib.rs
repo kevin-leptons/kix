@@ -112,3 +112,6 @@ impl Debug for InnerError {
         Display::fmt(&self, f)
     }
 }
+
+/// The error is immutable, so it's safe to send between threads.
+unsafe impl Send for Error {}

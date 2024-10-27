@@ -1,3 +1,5 @@
+use std::thread::{self};
+
 use kix::{Error, Result};
 
 #[test]
@@ -20,6 +22,19 @@ fn as_std_error() {
 #[test]
 fn from_str() {
     Error::new("An error happened");
+}
+
+#[test]
+fn send_result_between_threads() {
+    let handle = thread::spawn(|| kix::Result::Ok("foo"));
+    let thread_result = match handle.join() {
+        Ok(v) => v,
+        Err(e) => panic!("Thread panic {:?}", e),
+    };
+    match thread_result {
+        Ok(v) => assert_eq!(v, "foo"),
+        Err(e) => panic!("Thread retur error {e}"),
+    }
 }
 
 fn to_std_error_box_fn() -> std::result::Result<(), Box<dyn std::error::Error>> {
